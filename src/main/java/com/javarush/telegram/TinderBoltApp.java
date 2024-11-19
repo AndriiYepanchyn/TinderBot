@@ -31,44 +31,23 @@ public class TinderBoltApp extends MultiSessionTelegramBot {
 
     @Override
     public void onUpdateEventReceived(Update update) {
-        //TODO: основний функціонал бота будемо писати тут
-
+       String msg =  getMessageText();
+       switch (msg.toLowerCase()){
+           case "/start":
+               sendTextMessage("Вітаю на порталі знайомств для прибульців");
+               sendPhotoMessage("alien01");
+               sendTextButtonsMessage("Із ким хочете познайомитись?",
+                       "Мініксоїди", "Minixoids",
+                       "Клінгони", "Klingons",
+                       "Вулканці", "Vulcans",
+                       "Ференги", "Pherenghy");
+               break;
+           default:
+               return;
+       }
     }
 
     public static void main(String[] args) throws TelegramApiException {
-    	try {
-            // Шлях до cacerts
-            String cacertsPath = "C:\\Program Files\\Java\\jdk-19\\lib\\security\\cacerts";
-
-            // Завантажуємо існуюче сховище
-            FileInputStream fis = new FileInputStream(cacertsPath);
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            char[] password = "changeit".toCharArray(); // Стандартний пароль
-
-            keyStore.load(fis, password); // Завантажуємо сховище
-            fis.close();
-
-            // Завантажуємо сертифікат із файлу
-            FileInputStream certFile = new FileInputStream("C:\\JavaProjects\\_JavaRush\\TinderBold\\server.crt");
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            X509Certificate cert = (X509Certificate) cf.generateCertificate(certFile);
-            certFile.close();
-
-            // Додаємо сертифікат до сховища
-            String alias = "telegram_api"; // Унікальний alias
-            keyStore.setCertificateEntry(alias, cert);
-
-            // Зберігаємо оновлене сховище
-            FileOutputStream fos = new FileOutputStream(cacertsPath);
-            keyStore.store(fos, password); // Зберігаємо зміни
-            fos.close();
-
-            System.out.println("Сертифікат успішно імпортовано!");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }    	
-//    	===============================
-
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(new TinderBoltApp());
     }
